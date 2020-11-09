@@ -85,7 +85,9 @@ export class AppComponent {
           this.searched=true;
         }
       });
+      if(this.desc=='')
       this.showDescError=false;
+      if(this.selectedval=='')
       this.showFilterError=false;
     }
     else{
