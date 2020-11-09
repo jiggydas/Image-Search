@@ -1,0 +1,49 @@
+<div class="container">
+  <div style="color: blue; margin-bottom: 20px; text-align:center">
+    <h2>{{title}}</h2>
+  </div>
+
+  <label>Select a filter: </label>
+  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+    <mat-icon>arrow_drop_down</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="selected('Description')">
+      <span>Description</span>
+    </button>
+    <button mat-menu-item (click)="selected('File Size')">
+      <span>File Size</span>
+    </button>
+    <button mat-menu-item (click)="selected('File Type')">
+      <span>File Type</span>
+    </button>
+  </mat-menu>
+  <span>{{selectedVal}}</span><span [hidden]="!showFilterError" class="alert alert-danger mt-2">Select a filter</span><br/>
+  <label>Enter the search text:
+    <input #desc type="text" name="desc" (change)="changeDesc(desc.value)">
+  </label><span [hidden]="!showDescError" class="alert alert-danger mt-2">Search text is empty</span><br/><br/>
+
+  <button class="btn btn-success" [disabled]="false" (click)="search()">Search</button><br/><br/>
+  <div [hidden]="!successMessage" class="alert alert-success">Search successful! Please view the filtered list below</div>
+  <div [hidden]="!failureMessage" class="alert alert-danger">Image Search failed. Please select all required fields and try again</div>
+  <div [hidden]="!failureSearchMessage" class="alert alert-danger">Image Search failed. Please enter appropriate search text and try again</div><br/><br/>
+  <div><h2 [hidden]="searched">Images currently present in the database:</h2>
+    <ul [hidden]="searched" *ngFor="let image of images; let i=index">
+      <span class="dropdown-item" *ngIf="i<21"><label>{{i+1}}.</label> Image ID: {{image.name}}</span><br/>
+      <span class="dropdown-item" *ngIf="i<21">Image Description: {{image.desc}}</span><br/>
+      <span class="dropdown-item" *ngIf="i<21">Image Size: {{image.size}}</span><br/>
+      <span class="dropdown-item" *ngIf="i<21">Image Type: {{image.type}}</span><br/>
+    </ul>
+    <h2 [hidden]="!searched">Images as per the search filters:</h2>
+    <ul [hidden]="!searched" *ngFor="let image of filteredimages; let i=index">
+      <span class="dropdown-item" *ngIf="i<21"><label>{{i+1}}.</label> Image ID: {{image.name}}</span><br/>
+      <span class="dropdown-item" *ngIf="i<21">Image Description: {{image.desc}}</span><br/>
+      <span class="dropdown-item" *ngIf="i<21">Image Size: {{image.size}}</span><br/>
+      <span class="dropdown-item" *ngIf="i<21">Image Type: {{image.type}}</span><br/>
+    </ul>
+
+  </div>
+
+
+
+</div>
