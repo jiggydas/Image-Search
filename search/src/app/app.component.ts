@@ -49,7 +49,6 @@ export class AppComponent {
   search(){
     this.searched=true;
     this.filteredimages=[];
-    alert(this.selectedVal+" "+this.desc);
     if(this.selectedVal!='' && this.desc!=''){
       this.uploadService.searchImages(this.selectedVal,this.desc).subscribe(response=>{
         console.log(response);
