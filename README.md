@@ -1,7 +1,7 @@
 # Image Search
- Repository for searching images using AWS ElasticSearch   
-Hello
-This image searcher was developed by Jigyansoo Das   
+Repository for searching images using AWS ElasticSearch      
+Hello   
+This image searcher was developed by Jigyansoo Das      
 
 It has been developed using Angular, Node.js and AWS ElasticSearch   
 
