@@ -22,7 +22,6 @@ const con = mysql.createConnection({
 
     con.query('CREATE DATABASE IF NOT EXISTS Images;');
     con.query('USE Images;');
-    //con.query('DROP TABLE UploadedImages', function(error,result,fields){
     con.query('CREATE TABLE IF NOT EXISTS UploadedImages(id varchar(255) NOT NULL, Description varchar(255), Size varchar(255), Type varchar(255), PRIMARY KEY(id));', function(error, result, fields) {
         console.log(result);
     });
@@ -116,7 +115,7 @@ var upload = multer({
 //Uploading the incoming image to AWS S3
 app.post('/ping', upload.array('file',1), function (req, res, next) {
     
-    var resmsg = {"msg":'Uploaded!'};
+    var resmsg = {"msg":'Uploaded!',"responsecode":200};
     res.send(resmsg);
 });
 
@@ -139,8 +138,8 @@ app.post('/desc',function(req,res,next){
       var sql = 'INSERT INTO Images.UploadedImages (Description, Size, Type, id) VALUES ?'
       var values = [[desc,size,type,name]];
       con.query(sql,[values], function(err, result, fields) {
-          if (err) res.send(err);
-          if (result) res.send({description: desc, size: size, type: type});
+          if (err) res.send({responsecode:500});
+          if (result) res.send({description: desc, size: size, type: type,responsecode:200});
           if (fields) console.log(fields);
       });
   });
@@ -175,13 +174,16 @@ app.get('/getImages', (req, res) => {
               'size':x[i]._source.Size,
               'type':x[i]._source.Type
           }
-          console.log(rec);
+          
           rows.push(rec);
       }
-      console.log(rows);
+      
       res.send(rows);
     })
-    .catch(console.error);
+    .catch(err=>{
+      console.log(error);
+      res.send({"responsecode":400})
+    });
   };
   test();
   });
@@ -265,14 +267,17 @@ app.post('/searchImages',(req,res)=>{
                   'type':x[i]._source.Type,
                   'responsecode':200
               }
-              console.log(rec);
+              
               rows.push(rec);
           }
         }
-          console.log(rows);
+          
           res.send(rows);
         })
-        .catch(res.send({"responsecode":500}));
+        .catch(err=>{
+          console.log(err);
+          res.send({"responsecode":500,"error":err})
+        });
       };
       test(bodyval);
 
@@ -281,3 +286,4 @@ app.post('/searchImages',(req,res)=>{
 app.listen(8080, function () {
     console.log('Image Uploader app listening on port 8080!');
 });
+module.exports=app;
